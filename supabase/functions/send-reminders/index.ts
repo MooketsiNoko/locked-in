@@ -27,6 +27,7 @@ Deno.serve(async (req) => {
   const now = new Date()
   let sent = 0
   let skipped = 0
+  const errors: string[] = []
 
   for (const r of due) {
     if (r.kind === 'offset' && now.getTime() - new Date(r.fire_at).getTime() > LATE_MS) {
@@ -34,7 +35,11 @@ Deno.serve(async (req) => {
       continue
     }
 
-    const { data: subs } = await db.from('push_subscriptions').select('*').eq('user_id', r.user_id)
+    const { data: subs, error: subsError } = await db.from('push_subscriptions').select('*').eq('user_id', r.user_id)
+    if (subsError) {
+      errors.push(`subscriptions: ${subsError.message}`)
+      continue
+    }
     const payload = JSON.stringify({ title: r.title, body: r.body, url: '/' })
     for (const s of subs ?? []) {
       try {
@@ -46,14 +51,17 @@ Deno.serve(async (req) => {
       } catch (e) {
         const status = (e as { statusCode?: number }).statusCode
         if (status === 404 || status === 410) await db.from('push_subscriptions').delete().eq('id', s.id)
-        else console.error('push failed', status, (e as Error).message)
+        else {
+          console.error('push failed', status, (e as Error).message)
+          errors.push(`push ${status ?? ''}: ${(e as Error).message}`)
+        }
       }
     }
 
     if (r.kind === 'nudge') await rearmNudge(db, r, now)
   }
 
-  return Response.json({ claimed: due.length, sent, skipped })
+  return Response.json({ claimed: due.length, sent, skipped, errors })
 })
 
 // Keep asking until the project is logged: queue the next nudge a full interval after this send.
