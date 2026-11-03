@@ -9,6 +9,17 @@ A personal calendar/schedule app for classes, homework, hangouts and side projec
 | Hangout | start time | custom reminders (default: 2 hours before) |
 | Side project | no date | "have you worked on this?" nudge after N quiet days (default 2) |
 
+## Setup
+
+```
+npm install
+cp .env.example .env.local   # fill in the Supabase URL and publishable key
+npm run dev                  # app
+npm test                     # shared/rules and expandWeekly tests
+```
+
+Apply `supabase/migrations/*.sql` in order (Supabase SQL editor or `supabase db push`).
+
 ## Docs
 
 Read these before changing anything structural.

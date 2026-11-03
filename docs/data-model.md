@@ -48,7 +48,7 @@ Stored as local wall time so daylight saving cannot shift a class:
 }
 ```
 
-`expandWeekly(item, rangeStart, rangeEnd)` produces concrete occurrences in memory. Occurrences are never stored. Skipping a day means adding it to `exdates`.
+`expandWeekly(recurrence, rangeStart, rangeEnd)` produces concrete occurrences in memory. Occurrences are never stored. Skipping a day means adding it to `exdates`.
 
 ## reminders
 

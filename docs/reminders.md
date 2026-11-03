@@ -9,7 +9,7 @@
 | Hangout | Yes | each `ReminderSpec` in `details.reminders`, else `user_settings.default_hangout_reminders` (default: 2 hours before), relative to `starts_at` |
 | Project | Nudge | `last_worked_at + nudge_after_days` (default 2; `created_at` if never worked on); re-armed after each send |
 
-A spec is either `before` (N minutes earlier) or `day_at` (N days before, at a fixed local time; see [data-model.md](data-model.md)). `day_at` times use the user's `tz`. Fire times already in the past, or at/after the due or start time, are dropped (so a 15:00 reminder on a day when the work is due at 10:00 never fires). Done or cancelled items have no pending reminders.
+A spec is either `before` (N minutes earlier) or `day_at` (N days before, at a fixed local time; see [data-model.md](data-model.md)). `day_at` times use the user's `tz`. Fire times already in the past, or at/after the due or start time, are dropped (so a 15:00 reminder on a day when the work is due at 10:00 never fires). Done or cancelled items have no pending reminders. The exception is a project nudge that is already overdue: it fires at `now` (the next cron run) instead of being dropped.
 
 ## Pure rules (`shared/rules.ts`)
 

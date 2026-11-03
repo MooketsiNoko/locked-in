@@ -2,6 +2,8 @@
 
 Check items off as they land.
 
+Step 1 status: scaffold, `shared/rules.ts`, `expandWeekly`, tests, migrations 001-004 and email + password sign-in are written. Still open: apply the migrations to the Supabase project, confirm sign-up/sign-in end to end, then add Google sign-in.
+
 ## Build order
 
 1. [ ] **Foundation:** repo scaffold (Vite PWA), Supabase project, migrations with RLS, auth (email + password; Google sign-in added once password login works), `shared/rules.ts` + `expandWeekly` with tests.

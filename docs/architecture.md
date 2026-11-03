@@ -35,6 +35,8 @@
 ```
 locked-in/
   README.md  CLAUDE.md
+  package.json vite.config.ts tsconfig.json   one app at the repo root (Vite root is web/; tests run from here)
+  .env.local                    VITE_SUPABASE_URL, VITE_SUPABASE_PUBLISHABLE_KEY (gitignored; see .env.example)
   docs/                         architecture, data-model, reminders, roadmap
   web/                          React PWA
     src/
