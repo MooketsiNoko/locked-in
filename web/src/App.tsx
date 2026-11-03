@@ -1,7 +1,10 @@
 import { useEffect, useState } from 'react'
 import type { Session } from '@supabase/supabase-js'
 import { supabase } from './lib/supabase'
+import { useSettings } from './hooks/useItems'
+import { AgendaScreen } from './screens/AgendaScreen'
 import { AuthScreen } from './screens/AuthScreen'
+import { MonthScreen } from './screens/MonthScreen'
 
 export function App() {
   const [session, setSession] = useState<Session | null | undefined>(undefined)
@@ -14,12 +17,27 @@ export function App() {
 
   if (session === undefined) return null
   if (!session) return <AuthScreen />
+  return <Calendar email={session.user.email ?? ''} />
+}
+
+function Calendar({ email }: { email: string }) {
+  const [tab, setTab] = useState<'month' | 'agenda'>('month')
+  const { data: settings, error } = useSettings()
+  const tz = settings?.tz
 
   return (
-    <main style={{ padding: 16 }}>
-      <h1>Locked In</h1>
-      <p>Signed in as {session.user.email}</p>
-      <button onClick={() => supabase.auth.signOut()}>Sign out</button>
-    </main>
+    <>
+      <nav>
+        <button className={tab === 'month' ? 'active' : ''} onClick={() => setTab('month')}>Month</button>
+        <button className={tab === 'agenda' ? 'active' : ''} onClick={() => setTab('agenda')}>Agenda</button>
+        <span className="spacer" />
+        <small>{email}</small>
+        <button onClick={() => supabase.auth.signOut()}>Sign out</button>
+      </nav>
+      <main>
+        {error && <p role="alert">{error.message}</p>}
+        {tz && (tab === 'month' ? <MonthScreen tz={tz} /> : <AgendaScreen tz={tz} />)}
+      </main>
+    </>
   )
 }

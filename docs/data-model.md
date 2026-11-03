@@ -1,6 +1,6 @@
 # Data model
 
-All tables live in Supabase Postgres. Every table has `user_id uuid references auth.users` and RLS policies of the form `user_id = auth.uid()` for select/insert/update/delete. No table ships without a policy.
+All tables live in Supabase Postgres. Every table has `user_id uuid references auth.users` and RLS policies of the form `user_id = auth.uid()` for select/insert/update/delete. No table ships without a policy. Tables also need an explicit `grant ... to authenticated` (migration `005_grants.sql`); a new table without one fails with "permission denied" even when its policies are correct.
 
 ## items
 
