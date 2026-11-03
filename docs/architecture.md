@@ -40,7 +40,7 @@ locked-in/
   docs/                         architecture, data-model, reminders, roadmap
   web/                          React PWA
     src/
-      categories/               class.ts homework.ts hangout.ts project.ts index.ts
+      categories/               index.ts (labels + colors for now; split into one file per category in step 3)
       recurrence/               expandWeekly.ts
       api/                      items.ts reminders.ts push.ts settings.ts
       hooks/                    useItems useMonth useProjects
@@ -51,7 +51,7 @@ locked-in/
         projects/               ProjectsScreen + "log session"
         settings/               semester dates, default offsets, push toggle
       components/               cards/ common/ calendar/
-      navigation/  theme/  types/  lib/supabase.ts
+      navigation/  theme/  types/  lib/ (supabase.ts, dates.ts, entries.ts)
     public/                     manifest.webmanifest service-worker.js icons/
   shared/                       rules.ts types.ts (imported by web and the function)
   supabase/
