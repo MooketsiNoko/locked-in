@@ -20,6 +20,10 @@ npm test                     # shared/rules and expandWeekly tests
 
 Apply `supabase/migrations/*.sql` in order (Supabase SQL editor or `supabase db push`). Optionally run `supabase/seed.sql` once for sample data.
 
+## Deploy
+
+Hosted on Vercel (free tier), deployed from GitHub: every push to `main` goes live and every PR gets a preview URL. Set `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY` in the Vercel project settings, and add the site URL under Supabase Auth, URL Configuration. The app is an installable PWA (`web/public/manifest.webmanifest`, `service-worker.js`); on iPhone use Safari, Share, Add to Home Screen.
+
 ## Docs
 
 Read these before changing anything structural.
