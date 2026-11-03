@@ -6,7 +6,7 @@ import { useItems } from '../hooks/useItems'
 import { buildEntries } from '../lib/entries'
 import { addDays, startOfDay, todayIn } from '../lib/dates'
 
-const DAYS_AHEAD = 30
+const DAYS_AHEAD = 14
 const ORDER: Category[] = ['homework', 'hangout', 'class', 'project']
 
 export function AgendaScreen({ tz, onOpen }: { tz: string; onOpen: (itemId: string) => void }) {
