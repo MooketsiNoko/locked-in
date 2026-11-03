@@ -15,3 +15,14 @@ main { padding: 8px 16px; max-width: 900px; margin: 0 auto; }
 .agenda-group ul { padding-left: 18px; margin: 0; }
 .when { color: #666; font-size: 13px; }
 .empty { color: #888; font-size: 13px; margin: 0; }
+.chip { display: block; width: 100%; border: 0; text-align: left; cursor: pointer; font-family: inherit; box-sizing: border-box; }
+button.link { background: none; border: 0; padding: 0; font: inherit; color: inherit; text-decoration: underline; cursor: pointer; }
+.editor { display: grid; gap: 10px; max-width: 480px; }
+.field { display: grid; gap: 2px; font-size: 14px; }
+.field input, .field textarea, .field select { font: inherit; padding: 4px; }
+.editor fieldset { display: grid; gap: 8px; }
+.row, .actions, .days { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.tag { font-size: 13px; margin-right: 6px; }
+.detail dl { display: grid; grid-template-columns: max-content 1fr; gap: 6px 16px; }
+.detail dt { color: #666; }
+.detail dd { margin: 0; white-space: pre-wrap; }

@@ -1,8 +1,12 @@
 import type { Category } from '../../../shared/types'
+import { classCategory } from './class'
+import { homeworkCategory } from './homework'
+import { hangoutCategory } from './hangout'
+import { projectCategory } from './project'
 
-export const CATEGORIES: Record<Category, { label: string; color: string }> = {
-  class: { label: 'Classes', color: '#3b82f6' },
-  homework: { label: 'Homework', color: '#f97316' },
-  hangout: { label: 'Hangouts', color: '#22c55e' },
-  project: { label: 'Side projects', color: '#a855f7' },
-}
+export const CATEGORIES = {
+  class: classCategory,
+  homework: homeworkCategory,
+  hangout: hangoutCategory,
+  project: projectCategory,
+} satisfies Record<Category, unknown>

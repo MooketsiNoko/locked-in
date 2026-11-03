@@ -20,6 +20,8 @@ export type Item = {
   id: string
   category: Category
   title: string
+  notes?: string | null
+  location?: string | null
   status: Status
   starts_at: string | null
   ends_at: string | null
@@ -27,6 +29,9 @@ export type Item = {
   recurrence: Recurrence | null
   details: {
     reminders?: ReminderSpec[]
+    room?: string
+    instructor?: string
+    people?: string[]
     last_worked_at?: string
     nudge_after_days?: number
   }

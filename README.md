@@ -18,7 +18,7 @@ npm run dev                  # app
 npm test                     # shared/rules and expandWeekly tests
 ```
 
-Apply `supabase/migrations/*.sql` in order (Supabase SQL editor or `supabase db push`). Optionally run `supabase/seed.sql` once for sample items (until the editor exists in step 3).
+Apply `supabase/migrations/*.sql` in order (Supabase SQL editor or `supabase db push`). Optionally run `supabase/seed.sql` once for sample data.
 
 ## Docs
 

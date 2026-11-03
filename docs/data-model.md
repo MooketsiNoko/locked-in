@@ -88,7 +88,7 @@ Defaults for a new user:
 
 ## RPCs
 
-- `save_item(item jsonb, reminders jsonb[])`: upsert the item and replace its unsent reminders atomically.
+- `save_item(item jsonb, reminders jsonb)`: upsert the item and replace its unsent reminders atomically. `reminders` is a JSON array of `{kind, fire_at, title, body}` produced by `computeReminders`. Runs as the caller (RLS applies) and takes `user_id` from `auth.uid()`, never from the payload.
 - `log_project_session(item_id uuid)`: set `last_worked_at = now()` and replace the project's pending nudge with one at `now() + nudge_after_days`.
 - `claim_due_reminders(limit int)`: `select ... for update skip locked` where `fire_at <= now() and sent_at is null`; used only by the Edge Function (service role).
 

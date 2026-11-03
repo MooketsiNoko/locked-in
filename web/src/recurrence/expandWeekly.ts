@@ -3,7 +3,7 @@ import type { Recurrence } from '../../../shared/types'
 
 export type Occurrence = { date: string; start: Date; end: Date }
 
-const DAYS = ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA']
+export const WEEKDAYS = ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'] as const
 
 // Expands a weekly class recurrence into concrete occurrences overlapping [rangeStart, rangeEnd).
 // Times are local wall time in rec.tz, so daylight saving never shifts a class.
@@ -14,7 +14,7 @@ export function expandWeekly(rec: Recurrence, rangeStart: Date, rangeEnd: Date):
   for (let t = Date.parse(`${rec.from}T00:00:00Z`); t <= last; t += 86_400_000) {
     const day = new Date(t)
     const date = day.toISOString().slice(0, 10)
-    if (!rec.byday.includes(DAYS[day.getUTCDay()] as Recurrence['byday'][number])) continue
+    if (!rec.byday.includes(WEEKDAYS[day.getUTCDay()])) continue
     if (exdates.has(date)) continue
     const start = fromZonedTime(`${date}T${rec.start_time}:00`, rec.tz)
     const end = new Date(start.getTime() + rec.duration_min * 60_000)

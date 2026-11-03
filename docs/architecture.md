@@ -23,7 +23,7 @@
 ## Key decisions
 
 1. **PWA, not native.** The owner uses iOS with a Windows PC, so native iOS builds are not possible without a Mac, and TestFlight needs a paid Apple account. A PWA installs from a link. If a Mac or dev account appears later, Capacitor can wrap the same code.
-2. **One `items` table with a `category` column.** Categories differ by rules (fields, reminder defaults, color), not by storage. Each category is one file in `src/categories/` exporting its form fields, `details` schema, default reminder offsets and display info.
+2. **One `items` table with a `category` column.** Categories differ by rules (fields, reminder defaults, color), not by storage. Each category is one file in `src/categories/` exporting its form fields, `details` schema and display info. Default reminder offsets come from the user's settings, not the category files.
 3. **Server-side reminders.** iOS web apps cannot schedule local notifications while closed, so reminders are rows in a table and a cron job pushes them. This also gives multi-device delivery for free.
 4. **Reminder logic is pure and shared.** `shared/rules.ts` turns an item plus settings into a list of fire times. The client calls it when saving; the Edge Function re-uses it when re-arming nudges.
 5. **Multi-user from day one.** Every table has `user_id` and RLS, so friends can sign up without seeing each other's data. No admin features.
@@ -40,7 +40,7 @@ locked-in/
   docs/                         architecture, data-model, reminders, roadmap
   web/                          React PWA
     src/
-      categories/               index.ts (labels + colors for now; split into one file per category in step 3)
+      categories/               class.ts homework.ts hangout.ts project.ts (label, color, form fields, zod details schema), common.ts, index.ts
       recurrence/               expandWeekly.ts
       api/                      items.ts reminders.ts push.ts settings.ts
       hooks/                    useItems useMonth useProjects

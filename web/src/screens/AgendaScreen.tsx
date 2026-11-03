@@ -6,10 +6,10 @@ import { useItems } from '../hooks/useItems'
 import { buildEntries } from '../lib/entries'
 import { addDays, startOfDay, todayIn } from '../lib/dates'
 
-const DAYS_AHEAD = 30
+const DAYS_AHEAD = 14
 const ORDER: Category[] = ['homework', 'hangout', 'class', 'project']
 
-export function AgendaScreen({ tz }: { tz: string }) {
+export function AgendaScreen({ tz, onOpen }: { tz: string; onOpen: (itemId: string) => void }) {
   const today = todayIn(tz)
   const { start, end } = useMemo(
     () => ({ start: startOfDay(today, tz), end: startOfDay(addDays(today, DAYS_AHEAD), tz) }),
@@ -27,10 +27,10 @@ export function AgendaScreen({ tz }: { tz: string }) {
       {ORDER.map((cat) => {
         const rows =
           cat === 'project'
-            ? projects.map((p) => ({ key: p.id, when: '', title: p.title }))
+            ? projects.map((p) => ({ key: p.id, itemId: p.id, when: '', title: p.title }))
             : entries
                 .filter((e) => e.category === cat)
-                .map((e) => ({ key: e.key, when: formatInTimeZone(e.start, tz, 'EEE d MMM, h:mm a'), title: e.title }))
+                .map((e) => ({ key: e.key, itemId: e.itemId, when: formatInTimeZone(e.start, tz, 'EEE d MMM, h:mm a'), title: e.title }))
         return (
           <div key={cat} className="agenda-group">
             <h3 style={{ color: CATEGORIES[cat].color }}>{CATEGORIES[cat].label}</h3>
@@ -39,7 +39,7 @@ export function AgendaScreen({ tz }: { tz: string }) {
               {rows.map((r) => (
                 <li key={r.key}>
                   {r.when && <span className="when">{r.when} </span>}
-                  {r.title}
+                  <button className="link" onClick={() => onOpen(r.itemId)}>{r.title}</button>
                 </li>
               ))}
             </ul>
