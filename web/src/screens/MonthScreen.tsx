@@ -8,7 +8,7 @@ import { addDays, startOfDay, todayIn, weekday } from '../lib/dates'
 const MAX_CHIPS = 3
 const DOW = ['S', 'M', 'T', 'W', 'T', 'F', 'S']
 
-export function MonthScreen({ tz }: { tz: string }) {
+export function MonthScreen({ tz, onOpen }: { tz: string; onOpen: (itemId: string) => void }) {
   const today = todayIn(tz)
   const [first, setFirst] = useState(`${today.slice(0, 7)}-01`)
 
@@ -49,9 +49,9 @@ export function MonthScreen({ tz }: { tz: string }) {
             <div key={d} className={`cell${d.slice(0, 7) !== first.slice(0, 7) ? ' other' : ''}${d === today ? ' today' : ''}`}>
               <span className="num">{Number(d.slice(8))}</span>
               {entries.slice(0, MAX_CHIPS).map((e) => (
-                <div key={e.key} className="chip" style={{ background: CATEGORIES[e.category].color }} title={e.title}>
+                <button key={e.key} className="chip" style={{ background: CATEGORIES[e.category].color }} title={e.title} onClick={() => onOpen(e.itemId)}>
                   {e.title}
-                </div>
+                </button>
               ))}
               {entries.length > MAX_CHIPS && <div className="more">+{entries.length - MAX_CHIPS}</div>}
             </div>
