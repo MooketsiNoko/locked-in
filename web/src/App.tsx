@@ -9,6 +9,7 @@ import { AuthScreen } from './screens/AuthScreen'
 import { ItemDetailScreen } from './screens/ItemDetailScreen'
 import { ItemEditorScreen } from './screens/ItemEditorScreen'
 import { MonthScreen } from './screens/MonthScreen'
+import { SettingsScreen } from './screens/SettingsScreen'
 
 export function App() {
   const [session, setSession] = useState<Session | null | undefined>(undefined)
@@ -25,7 +26,7 @@ export function App() {
 }
 
 function Calendar({ email }: { email: string }) {
-  const [tab, setTab] = useState<'month' | 'agenda'>('month')
+  const [tab, setTab] = useState<'month' | 'agenda' | 'settings'>('month')
   const [view, setView] = useState<
     { kind: 'detail'; itemId: string } | { kind: 'edit'; itemId?: string; category?: Category } | null
   >(null)
@@ -34,8 +35,8 @@ function Calendar({ email }: { email: string }) {
   return (
     <>
       <nav>
-        <button className={tab === 'month' ? 'active' : ''} onClick={() => setTab('month')}>Month</button>
-        <button className={tab === 'agenda' ? 'active' : ''} onClick={() => setTab('agenda')}>Agenda</button>
+        <button className={tab === 'month' ? 'active' : ''} onClick={() => { setView(null); setTab('month') }}>Month</button>
+        <button className={tab === 'agenda' ? 'active' : ''} onClick={() => { setView(null); setTab('agenda') }}>Agenda</button>
         <select
           value=""
           aria-label="New item"
@@ -46,6 +47,7 @@ function Calendar({ email }: { email: string }) {
             <option key={c} value={c}>{CATEGORIES[c].singular}</option>
           ))}
         </select>
+        <button className={tab === 'settings' ? 'active' : ''} onClick={() => { setView(null); setTab('settings') }}>Settings</button>
         <span className="spacer" />
         <small>{email}</small>
         <button onClick={() => supabase.auth.signOut()}>Sign out</button>
@@ -70,9 +72,9 @@ function Calendar({ email }: { email: string }) {
             onDeleted={() => setView(null)}
           />
         )}
-        {settings && !view && (tab === 'month'
-          ? <MonthScreen tz={settings.tz} onOpen={(itemId) => setView({ kind: 'detail', itemId })} />
-          : <AgendaScreen tz={settings.tz} onOpen={(itemId) => setView({ kind: 'detail', itemId })} />)}
+        {settings && !view && tab === 'month' && <MonthScreen tz={settings.tz} onOpen={(itemId) => setView({ kind: 'detail', itemId })} />}
+        {settings && !view && tab === 'agenda' && <AgendaScreen tz={settings.tz} onOpen={(itemId) => setView({ kind: 'detail', itemId })} />}
+        {!view && tab === 'settings' && <SettingsScreen />}
       </main>
     </>
   )

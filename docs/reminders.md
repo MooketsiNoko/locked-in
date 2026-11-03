@@ -35,6 +35,6 @@ If a reminder is more than 60 minutes late (outage, cron gap), it is marked sent
 ## Push on iOS
 
 - The PWA must be added to the Home Screen; Safari tabs cannot receive push.
-- Permission must be requested from a user gesture (a button in Settings), not on load.
+- Permission must be requested from a user gesture (a button in Settings), not on load. The Settings screen shows "Enable notifications" and saves the subscription to `push_subscriptions`; the VAPID public key is the `VITE_VAPID_PUBLIC_KEY` env var and the private key is a Supabase secret.
 - Delivery can lag. The settings screen shows whether this device is subscribed.
 - Keep payloads small: `{ title, body, url }`. The service worker opens `url` on tap.
