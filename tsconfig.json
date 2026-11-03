@@ -9,6 +9,7 @@
     "noEmit": true,
     "skipLibCheck": true,
     "isolatedModules": true,
+    "allowImportingTsExtensions": true,
     "types": ["vite/client"]
   },
   "include": ["web/src", "shared", "__tests__", "vite.config.ts"]

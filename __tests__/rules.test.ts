@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { computeReminders } from '../shared/rules'
+import { computeReminders, nextNudge } from '../shared/rules'
 import { DEFAULT_SETTINGS, type Item, type Settings } from '../shared/types'
 
 const settings: Settings = { tz: 'America/New_York', ...DEFAULT_SETTINGS }
@@ -83,5 +83,19 @@ describe('computeReminders', () => {
       details: { last_worked_at: '2026-03-01T10:00:00Z', nudge_after_days: 5 },
     }
     expect(fires(item)).toEqual(['2026-03-06T10:00:00.000Z'])
+  })
+})
+
+describe('nextNudge', () => {
+  const project: Item = { ...base, category: 'project', title: 'Site' }
+
+  it('is one default interval after the send time', () => {
+    const row = nextNudge(project, settings, new Date('2026-03-05T08:00:00Z'))
+    expect(row).toMatchObject({ kind: 'nudge', title: 'Site', fire_at: '2026-03-07T08:00:00.000Z' })
+  })
+
+  it('uses the per-project interval when set', () => {
+    const row = nextNudge({ ...project, details: { nudge_after_days: 5 } }, settings, new Date('2026-03-05T08:00:00Z'))
+    expect(row.fire_at).toBe('2026-03-10T08:00:00.000Z')
   })
 })

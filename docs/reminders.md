@@ -23,9 +23,9 @@ No I/O, no clock access beyond `now`, so it is fully unit-testable. Tests cover:
 
 1. **Save:** the client calls `computeReminders`, then the `save_item` RPC writes the item and replaces its unsent reminders in one transaction.
 2. **Cron:** `pg_cron` calls the `send-reminders` Edge Function every minute (via `pg_net`).
-3. **Claim:** the function calls `claim_due_reminders` (row-locking, so overlapping runs cannot double-send).
+3. **Claim:** the function calls `claim_due_reminders`, which sets `sent_at` on the rows it returns using `for update skip locked`, so overlapping runs cannot double-send. Because claiming marks the row, a push that fails for a reason other than a dead subscription is not retried.
 4. **Send:** for each reminder, Web Push to every `push_subscriptions` row of that user. Dead subscriptions (404/410) are deleted.
-5. **Mark:** set `sent_at`. For `nudge` reminders, insert the next nudge at `now() + nudge_after_days`, so it keeps asking until the project is logged.
+5. **Re-arm:** for `nudge` reminders, insert the next nudge a full interval later (`nextNudge` in `shared/rules.ts`), so it keeps asking until the project is logged.
 6. **Log a session:** `log_project_session` resets the nudge.
 
 ## Late and missed reminders
