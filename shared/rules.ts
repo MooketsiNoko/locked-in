@@ -1,7 +1,8 @@
 import { formatInTimeZone, fromZonedTime } from 'date-fns-tz'
-import type { Item, ReminderRow, ReminderSpec, Settings } from './types'
+import type { Item, ReminderRow, ReminderSpec, Settings } from './types.ts'
 
 const DAY_MS = 86_400_000
+const NUDGE_BODY = 'Have you worked on this lately?'
 
 // Absolute instant for `daysBefore` calendar days before `base`, at local wall time `time` in `tz`.
 function dayAt(base: Date, spec: { daysBefore: number; time: string }, tz: string): Date {
@@ -27,7 +28,7 @@ export function computeReminders(item: Item, settings: Settings, now: Date): Rem
         kind: 'nudge',
         fire_at: fire.toISOString(),
         title: item.title,
-        body: 'Have you worked on this lately?',
+        body: NUDGE_BODY,
       },
     ]
   }
@@ -50,4 +51,15 @@ export function computeReminders(item: Item, settings: Settings, now: Date): Rem
     .filter((fire) => fire > now && fire < base)
     .sort((a, b) => a.getTime() - b.getTime())
     .map((fire) => ({ kind: 'offset' as const, fire_at: fire.toISOString(), title, body }))
+}
+
+// After a nudge is sent, the next one is due a full interval later, until the project is logged.
+export function nextNudge(item: Item, settings: Pick<Settings, 'default_nudge_days'>, sentAt: Date): ReminderRow {
+  const days = item.details.nudge_after_days ?? settings.default_nudge_days
+  return {
+    kind: 'nudge',
+    fire_at: new Date(sentAt.getTime() + days * DAY_MS).toISOString(),
+    title: item.title,
+    body: NUDGE_BODY,
+  }
 }

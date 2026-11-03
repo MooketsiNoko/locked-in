@@ -1,6 +1,6 @@
 # Data model
 
-All tables live in Supabase Postgres. Every table has `user_id uuid references auth.users` and RLS policies of the form `user_id = auth.uid()` for select/insert/update/delete. No table ships without a policy. Tables also need an explicit `grant ... to authenticated` (migration `005_grants.sql`); a new table without one fails with "permission denied" even when its policies are correct.
+All tables live in Supabase Postgres. Every table has `user_id uuid references auth.users` and RLS policies of the form `user_id = auth.uid()` for select/insert/update/delete. No table ships without a policy. Tables also need an explicit `grant ... to authenticated` (migration `005_grants.sql`; the Edge Function's `service_role` needs the same, see `008_service_role_grants.sql`); a new table without one fails with "permission denied" even when its policies are correct.
 
 ## items
 
@@ -90,7 +90,7 @@ Defaults for a new user:
 
 - `save_item(item jsonb, reminders jsonb)`: upsert the item and replace its unsent reminders atomically. `reminders` is a JSON array of `{kind, fire_at, title, body}` produced by `computeReminders`. Runs as the caller (RLS applies) and takes `user_id` from `auth.uid()`, never from the payload.
 - `log_project_session(item_id uuid)`: set `last_worked_at = now()` and replace the project's pending nudge with one at `now() + nudge_after_days`.
-- `claim_due_reminders(limit int)`: `select ... for update skip locked` where `fire_at <= now() and sent_at is null`; used only by the Edge Function (service role).
+- `claim_due_reminders(p_limit int)`: marks and returns reminders where `fire_at <= now() and sent_at is null`, using `for update skip locked`; used only by the Edge Function (service role).
 
 ## Time rules
 

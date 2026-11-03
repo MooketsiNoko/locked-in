@@ -57,6 +57,7 @@ locked-in/
   supabase/
     migrations/                 001_items 002_reminders 003_push_subscriptions 004_user_settings
     functions/send-reminders/   cron-triggered, sends Web Push
+    cron.sql                    one-time pg_cron schedule, run by hand (holds a secret)
   __tests__/                    rules.test.ts expandWeekly.test.ts
 ```
 
