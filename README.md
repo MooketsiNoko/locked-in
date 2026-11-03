@@ -14,7 +14,7 @@ A personal calendar/schedule app for classes, homework, hangouts and side projec
 ```
 npm install
 cp .env.example .env.local   # fill in the Supabase URL and publishable key
-npm run dev                  # app
+npm run dev                  # app (also set VITE_VAPID_PUBLIC_KEY to try push)
 npm test                     # shared/rules and expandWeekly tests
 ```
 
